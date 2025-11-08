@@ -9,7 +9,6 @@ import { type MatchingKeys } from "./types/MatchingKeys.type.js";
 
 export * from "./parser/index.js";
 
-
 declare module "zod" {
   interface ZodObject {
     tableName(name: string): this;
