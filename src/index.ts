@@ -7,7 +7,7 @@ import { primaryKey } from "./extensions/primaryKey.js";
 import { tableName } from "./extensions/tableName.js";
 import { type MatchingKeys } from "./types/MatchingKeys.type.js";
 
-export * from "./parser/index.js";
+export default "./parser/index.js";
 
 declare module "zod" {
   interface ZodObject {
