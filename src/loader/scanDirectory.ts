@@ -1,16 +1,26 @@
-import { promises as fs } from 'node:fs';
-import * as path from 'node:path';
+import { promises as fs } from "node:fs";
+import * as path from "node:path";
 
 export async function scanDirectory(directory: string): Promise<string[]> {
     try {
-        const files = await fs.readdir(directory, {
-            recursive: true,
-            withFileTypes: true
-        });
+        const results: string[] = [];
 
-        const filteredFiles = files.filter(file => file.isFile());
-        const filePaths = filteredFiles.map(file => path.join(file.parentPath, file.name));
-        return filePaths;
+        async function walk(dir: string) {
+            const entries = await fs.readdir(dir, { withFileTypes: true });
+            await Promise.all(
+                entries.map(async (entry) => {
+                    const fullPath = path.join(dir, entry.name);
+                    if (entry.isDirectory()) {
+                        await walk(fullPath);
+                    } else if (entry.isFile()) {
+                        results.push(fullPath);
+                    }
+                })
+            );
+        }
+
+        await walk(directory);
+        return results;
     } catch (error) {
         return [];
     }

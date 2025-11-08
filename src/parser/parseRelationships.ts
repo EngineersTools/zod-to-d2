@@ -15,15 +15,9 @@ export function parseRelationships(
 
   switch (def.type) {
     case "object": {
-      let tableName = "unknown_table";
-
-      if (propertyName !== "root") {
-        tableName = z4.globalRegistry.get(schema)?.tableName as string;
-        if (!tableName) {
-          tableName = propertyName;
-        }
-      }
-
+      // determine table name: prefer registry value, otherwise use propertyName
+      let tableName = (z4.globalRegistry.get(schema)?.tableName as string) ||
+        (propertyName !== "root" ? propertyName : "unknown_table");
       const objectProperties = getObjectProperties(schema as z4.$ZodObject);
       relationships.push(
         ...objectProperties.flatMap((prop) =>
