@@ -8,9 +8,10 @@ export * from "./createUnionPropertyType.js";
 export * from "./createUnknownPropertyType.js";
 export * from "./getForeignKeyFromMeta.js";
 export * from "./getObjectProperties.js";
+export * from "./getPrimaryKey.js";
+export * from "./getTableName.js";
 export * from "./hasNotes.js";
 export * from "./isForeignKey.js";
 export * from "./isPrimaryKey.js";
 export * from "./parseProperties.js";
 export * from "./parseRelationships.js";
-
