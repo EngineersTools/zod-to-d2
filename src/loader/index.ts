@@ -1,2 +1,2 @@
-export * from "./loadZodSchemas";
-export * from "./scanDirectory";
+export * from "./loadZodSchemas.js";
+export * from "./scanDirectory.js";

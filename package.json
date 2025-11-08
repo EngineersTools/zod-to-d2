@@ -1,6 +1,6 @@
 {
   "name": "@eng-tools/zod-to-d2",
-  "version": "0.0.17",
+  "version": "0.0.20",
   "description": "A library that extends Zod types and provides tools to convert schemas to D2 diagrams.",
   "repository": {
     "type": "git",
@@ -22,6 +22,21 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.js"
+    },
+    "./parser/*": {
+      "types": "./dist/parser/*.d.ts",
+      "import": "./dist/parser/*.js",
+      "require": "./dist/parser/*.js"
+    },
+    "./builder/*": {
+      "types": "./dist/builder/*.d.ts",
+      "import": "./dist/builder/*.js",
+      "require": "./dist/builder/*.js"
+    },
+    "./loader/*": {
+      "types": "./dist/loader/*.d.ts",
+      "import": "./dist/loader/*.js",
+      "require": "./dist/loader/*.js"
     },
     "./package.json": "./package.json"
   },

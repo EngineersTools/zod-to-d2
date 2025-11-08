@@ -7,9 +7,22 @@ import { primaryKey } from "./extensions/primaryKey.js";
 import { tableName } from "./extensions/tableName.js";
 import { type MatchingKeys } from "./types/MatchingKeys.type.js";
 
+import * as parser from "./parser/index.js";
+import * as builder from "./builder/index.js";
+import * as loader from "./loader/index.js";
+
 export * from "./parser/index.js";
 export * from "./builder/index.js";
 export * from "./loader/index.js";
+
+// Provide a default aggregate export for consumers using default imports
+const defaultExport = {
+  ...parser,
+  ...builder,
+  ...loader,
+};
+
+export default defaultExport;
 
 declare module "zod" {
   interface ZodObject {
