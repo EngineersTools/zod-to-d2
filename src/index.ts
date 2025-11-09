@@ -27,6 +27,8 @@ export default defaultExport;
 declare module "zod" {
   interface ZodObject {
     tableName(name: string): this;
+    parseProperties(): ReturnType<typeof parser.parseProperties>;
+    parseRelationships(): ReturnType<typeof parser.parseRelationships>;
   }
 
   interface ZodType {
@@ -46,6 +48,8 @@ const tableNameSymbol = Symbol.for("tableName");
 const primaryKeySymbol = Symbol.for("primaryKey");
 const foreignKeySymbol = Symbol.for("foreignKey");
 const notesSymbol = Symbol.for("notes");
+const parsePropertiesSymbol = Symbol.for("parseProperties");
+const parseRelationshipsSymbol = Symbol.for("parseRelationships");
 
 if (!(globalThis as { [k: symbol]: unknown })[tableNameSymbol]) {
   (globalThis as { [k: symbol]: unknown })[tableNameSymbol] = true;
@@ -92,4 +96,34 @@ if (!(globalThis as { [k: symbol]: unknown })[notesSymbol]) {
   z4.$ZodType.prototype.notes = notes;
   z.ZodType.prototype.notes = notes;
   z.string.prototype.notes = notes;
+}
+
+if (!(globalThis as { [k: symbol]: unknown })[parsePropertiesSymbol]) {
+  (globalThis as { [k: symbol]: unknown })[parsePropertiesSymbol] = true;
+  Object.defineProperty(z3.ZodObject.prototype, "parseProperties", {
+    get: function (this) {
+      return () => parser.parseProperties(this);
+    },
+  });
+  z4.$ZodObject.prototype.parseProperties = function () {
+    return parser.parseProperties(this);
+  };
+  z.ZodObject.prototype.parseProperties = function () {
+    return parser.parseProperties(this);
+  };
+}
+
+if (!(globalThis as { [k: symbol]: unknown })[parseRelationshipsSymbol]) {
+  (globalThis as { [k: symbol]: unknown })[parseRelationshipsSymbol] = true;
+  Object.defineProperty(z3.ZodObject.prototype, "parseRelationships", {
+    get: function (this) {
+      return () => parser.parseRelationships(this);
+    },
+  });
+  z4.$ZodObject.prototype.parseRelationships = function () {
+    return parser.parseRelationships(this);
+  };
+  z.ZodObject.prototype.parseRelationships = function () {
+    return parser.parseRelationships(this);
+  };
 }
