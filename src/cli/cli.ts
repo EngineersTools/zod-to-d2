@@ -11,7 +11,7 @@ import { zodToD2 } from "./zodToD2.js";
 program
   .name("zod2d2")
   .description("CLI tool to convert Zod schemas to D2 diagrams")
-  .version("0.0.13")
+  .version("0.0.22")
   .helpOption("-h, --help", chalk.blue("Display help for command"));
 
 program
