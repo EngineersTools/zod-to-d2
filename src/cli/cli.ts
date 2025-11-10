@@ -4,14 +4,42 @@ import chalk from "chalk";
 import { program } from "commander";
 import process from "node:process";
 import path from "path";
+import fs from "node:fs";
+import url from "node:url";
 import type { ZodToD2Config } from "../types/ZodToD2Config.type.js";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
 import { zodToD2 } from "./zodToD2.js";
 
+// Read version from package.json so the CLI stays in sync with the package
+// Prefer the generated VERSION at build time. If missing (for local dev without running the
+// generator), fall back to reading package.json at runtime.
+let CLI_VERSION = "0.0.0";
+try {
+  // Attempt to import generated version (TypeScript source will be compiled to dist)
+  // Use require-like dynamic handling because ts-node or tests may run without build step
+  // Importing the TS file directly via import will be done by the compiler in production.
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // Try require first (works in node when transpiled to JS)
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const generated = require("../generated/version");
+  CLI_VERSION = generated?.VERSION ?? CLI_VERSION;
+} catch (err) {
+  // Fallback: read package.json synchronously
+  try {
+    const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+    const pkgPath = path.resolve(__dirname, "../../package.json");
+    const pkgRaw = fs.readFileSync(pkgPath, "utf8");
+    const pkg = JSON.parse(pkgRaw) as { version?: string };
+    CLI_VERSION = pkg.version ?? CLI_VERSION;
+  } catch (e) {
+    // final fallback already set
+  }
+}
+
 program
   .name("zod2d2")
   .description("CLI tool to convert Zod schemas to D2 diagrams")
-  .version("0.0.22")
+  .version(CLI_VERSION)
   .helpOption("-h, --help", chalk.blue("Display help for command"));
 
 program
