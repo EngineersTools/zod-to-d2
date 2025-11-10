@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   publish:
@@ -38,11 +39,5 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Publish to npm
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          npm publish --access public
-      - name: Cleanup npmrc
-        run: rm -f ~/.npmrc
+      - name: Publish to npm (OIDC Trusted Publisher)
+        run: npm publish --provenance --access public
