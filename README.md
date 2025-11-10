@@ -1,6 +1,7 @@
 # zod-to-d2
 
 [![CI](https://github.com/EngineersTools/zod-to-d2/actions/workflows/ci.yml/badge.svg)](https://github.com/EngineersTools/zod-to-d2/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/%40eng-tools%2Fzod-to-d2.svg?color=informational)](https://www.npmjs.com/package/@eng-tools/zod-to-d2)
 
 `zod-to-d2` is a TypeScript library that extends the [Zod](https://github.com/colinhacks/zod) schema validation library, enabling you to annotate your schemas and automatically generate [D2](https://d2lang.com/) diagrams. This helps visualize data models, relationships, and schema structures directly from your Zod definitions.
 
