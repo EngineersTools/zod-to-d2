@@ -1,28 +1,29 @@
 import { describe, expect, it } from "vitest";
+import { getZodMetadata } from "../../src/utils/zodMetadataRegistry";
 import { childSchema, parentOneSchema, parentTwoSchema, schemaWithoutMetadata } from "../schema.fixtures";
 
 describe("Primary Key Tests", () => {
     describe("Metadata", () => {
         it("should have metadata defined", () => {
-            expect(parentOneSchema._zod.def.shape.id.meta()).toBeDefined();
-            expect(parentTwoSchema._zod.def.shape.id.meta()).toBeDefined();
-            expect(childSchema._zod.def.shape.id.meta()).toBeDefined();
+            expect(getZodMetadata(parentOneSchema._zod.def.shape.id)).toBeDefined();
+            expect(getZodMetadata(parentTwoSchema._zod.def.shape.id)).toBeDefined();
+            expect(getZodMetadata(childSchema._zod.def.shape.id)).toBeDefined();
         });
 
         it("should not have metadata for schemas without primaryKey", () => {
-            expect(schemaWithoutMetadata._zod.def.shape.id.meta()).toBeUndefined();
+            expect(getZodMetadata(schemaWithoutMetadata._zod.def.shape.id)).toBeUndefined();
         });
 
         it("should have primaryKey metadata", () => {
-            expect(parentOneSchema._zod.def.shape.id.meta()?.primaryKey).toBeDefined();
-            expect(parentTwoSchema._zod.def.shape.id.meta()?.primaryKey).toBeDefined();
-            expect(childSchema._zod.def.shape.id.meta()?.primaryKey).toBeDefined();
+            expect(getZodMetadata(parentOneSchema._zod.def.shape.id)?.primaryKey).toBeDefined();
+            expect(getZodMetadata(parentTwoSchema._zod.def.shape.id)?.primaryKey).toBeDefined();
+            expect(getZodMetadata(childSchema._zod.def.shape.id)?.primaryKey).toBeDefined();
         });
 
         it("should have correct primaryKey metadata", () => {
-            expect(parentOneSchema._zod.def.shape.id.meta()?.primaryKey).toEqual({ type: 'ZodPrimaryKey' });
-            expect(parentTwoSchema._zod.def.shape.id.meta()?.primaryKey).toEqual({ type: 'ZodPrimaryKey' });
-            expect(childSchema._zod.def.shape.id.meta()?.primaryKey).toEqual({ type: 'ZodPrimaryKey' });
+            expect(getZodMetadata(parentOneSchema._zod.def.shape.id)?.primaryKey).toEqual({ type: 'ZodPrimaryKey' });
+            expect(getZodMetadata(parentTwoSchema._zod.def.shape.id)?.primaryKey).toEqual({ type: 'ZodPrimaryKey' });
+            expect(getZodMetadata(childSchema._zod.def.shape.id)?.primaryKey).toEqual({ type: 'ZodPrimaryKey' });
         });
     });
 });

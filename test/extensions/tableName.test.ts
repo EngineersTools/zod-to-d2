@@ -1,28 +1,29 @@
 import { describe, expect, it } from "vitest";
+import { getZodMetadata } from "../../src/utils/zodMetadataRegistry";
 import { CHILD_TABLE_NAME, childSchema, PARENT_ONE_TABLE_NAME, PARENT_TWO_TABLE_NAME, parentOneSchema, parentTwoSchema, schemaWithoutMetadata } from "../schema.fixtures";
 
 describe("tableName Tests", () => {
     describe("Metadata", () => {
         it("should have metadata defined", () => {
-            expect(parentOneSchema.meta()).toBeDefined();
-            expect(parentTwoSchema.meta()).toBeDefined();
-            expect(childSchema.meta()).toBeDefined();
+            expect(getZodMetadata(parentOneSchema)).toBeDefined();
+            expect(getZodMetadata(parentTwoSchema)).toBeDefined();
+            expect(getZodMetadata(childSchema)).toBeDefined();
         });
 
         it("should not have metadata for schemas without tableName", () => {
-            expect(schemaWithoutMetadata.meta()).toBeUndefined();
+            expect(getZodMetadata(schemaWithoutMetadata)).toBeUndefined();
         });
 
         it("should have tableName metadata", () => {
-            expect(parentOneSchema.meta()?.tableName).toBeDefined();
-            expect(parentTwoSchema.meta()?.tableName).toBeDefined();
-            expect(childSchema.meta()?.tableName).toBeDefined();
+            expect(getZodMetadata(parentOneSchema)?.tableName).toBeDefined();
+            expect(getZodMetadata(parentTwoSchema)?.tableName).toBeDefined();
+            expect(getZodMetadata(childSchema)?.tableName).toBeDefined();
         });
 
         it("should have correct tableName metadata", () => {
-            expect(parentOneSchema.meta()?.tableName).toBe(PARENT_ONE_TABLE_NAME);
-            expect(parentTwoSchema.meta()?.tableName).toBe(PARENT_TWO_TABLE_NAME);
-            expect(childSchema.meta()?.tableName).toBe(CHILD_TABLE_NAME);
+            expect(getZodMetadata(parentOneSchema)?.tableName).toBe(PARENT_ONE_TABLE_NAME);
+            expect(getZodMetadata(parentTwoSchema)?.tableName).toBe(PARENT_TWO_TABLE_NAME);
+            expect(getZodMetadata(childSchema)?.tableName).toBe(CHILD_TABLE_NAME);
         });
     });
 });

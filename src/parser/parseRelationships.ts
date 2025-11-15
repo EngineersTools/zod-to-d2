@@ -3,6 +3,7 @@ import { type PropertyRelationship } from "../types/PropertyRelationship.type.js
 import { ZodForeignKeyDef } from "../types/ZodForeignKeyDef.js";
 import { getObjectProperties } from "./getObjectProperties.js";
 import { isForeignKey } from "./isForeignKey.js";
+import { getZodMetadata } from "../utils/zodMetadataRegistry.js";
 
 export function parseRelationships(
   _schema: z4.$ZodType,
@@ -16,7 +17,7 @@ export function parseRelationships(
   switch (def.type) {
     case "object": {
       // determine table name: prefer registry value, otherwise use propertyName
-      let tableName = (z4.globalRegistry.get(schema)?.tableName as string) ||
+      let tableName = getZodMetadata(schema)?.tableName ||
         (propertyName !== "root" ? propertyName : "unknown_table");
       const objectProperties = getObjectProperties(schema as z4.$ZodObject);
       relationships.push(
@@ -29,11 +30,8 @@ export function parseRelationships(
 
     default: {
       if (isForeign) {
-        const foreignKey = z4.globalRegistry.get(schema)
-          ?.foreignKey as ZodForeignKeyDef;
-        const foreignEntity = z4.globalRegistry.get(
-          foreignKey.foreignSchema
-        )?.tableName;
+        const foreignKey = getZodMetadata(schema)?.foreignKey as ZodForeignKeyDef;
+        const foreignEntity = getZodMetadata(foreignKey.foreignSchema)?.tableName;
 
         relationships.push({
           localProperty: propertyName,

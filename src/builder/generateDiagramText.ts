@@ -1,6 +1,7 @@
 import * as z4 from "zod/v4/core";
 import { parseProperties } from "../parser/parseProperties.js";
 import { parseRelationships } from "../parser/parseRelationships.js";
+import { getZodMetadata } from "../utils/zodMetadataRegistry.js";
 import { buildDiagram } from "./buildDiagram.js";
 import { buildRelationship } from "./buildRelationship.js";
 import { buildTable } from "./buildTable.js";
@@ -12,8 +13,7 @@ export function generateDiagramText(
   const diagramElements = new Array<string>();
 
   schemas.forEach((s) => {
-    const tableName =
-      (z4.globalRegistry.get(s)?.tableName as string) || "unknown_table";
+    const tableName = getZodMetadata(s)?.tableName || "unknown_table";
     const properties = parseProperties(s as z4.$ZodType, tableName);
     const relationships = parseRelationships(s as z4.$ZodType, tableName);
 

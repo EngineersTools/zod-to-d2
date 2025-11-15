@@ -1,5 +1,6 @@
 import * as z4 from "zod/v4/core";
 import { type PropertyType } from "../types/Property.type.js";
+import { getZodMetadata } from "../utils/zodMetadataRegistry.js";
 import { createArrayPropertyType } from "./createArrayPropertyType.js";
 import { createEnumPropertyType } from "./createEnumPropertyType.js";
 import { createLiteralPropertyType } from "./createLiteralPropertyType.js";
@@ -23,9 +24,8 @@ export function parseProperties(
 
   const isPrimary = isPrimaryKey(schema);
   const isForeign = isForeignKey(schema);
-  const notes = hasNotes(schema)
-    ? (z4.globalRegistry.get(schema)?.notes as string[]) ?? []
-    : [];
+  const metadata = getZodMetadata(schema);
+  const notes = hasNotes(schema) ? metadata?.notes ?? [] : [];
 
   switch (def.type) {
     case "optional": {
@@ -57,8 +57,7 @@ export function parseProperties(
     case "object": {
       let tableName = propertyName;
       if (tableName === "unknown_table") {
-        tableName =
-          (z4.globalRegistry.get(schema)?.tableName as string) ?? propertyName;
+        tableName = metadata?.tableName ?? propertyName;
       }
 
       const objectProperties = getObjectProperties(schema as z4.$ZodObject);

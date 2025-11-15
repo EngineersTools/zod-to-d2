@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.26] - 2025-11-15
+### Fixed
+- Replaced the reliance on `zod`'s internal `globalRegistry` with a process-wide weak-map so metadata survives when the CLI and user schemas load different package copies (e.g. via `pnpm dlx`).
+- Updated all parser/builder helpers to read from the shared registry, ensuring foreign key relationships and notes always appear in generated diagrams.
+
+### Added
+- Regression test that simulates two isolated imports of the library to verify metadata continuity.
+
+---
+
 ## [0.0.25] - 2025-11-15
 ### Fixed
 - Ensure CLI-loaded schemas share the same Zod registry so foreign keys and table metadata persist, restoring relationship output in generated D2 diagrams.

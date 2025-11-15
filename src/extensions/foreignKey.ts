@@ -1,5 +1,6 @@
 import * as z4 from "zod/v4/core";
 import { ZodForeignKeyDef } from "../types/ZodForeignKeyDef.js";
+import { getZodMetadata, setZodMetadata } from "../utils/zodMetadataRegistry.js";
 
 export function foreignKey<
   TThis extends z4.$ZodType,
@@ -34,33 +35,24 @@ export function foreignKey<
     );
   }
 
-  const currentMetadata = z4.globalRegistry.get(this);
+  const currentMetadata = getZodMetadata(this);
 
-  if (currentMetadata) {
-    if (currentMetadata.foreignKey) {
-      throw new Error(
-        `Foreign key '${String(
-          (currentMetadata.foreignKey as ZodForeignKeyDef).foreignProperty
-        )}' already defined`
-      );
-    } else {
-      currentMetadata.foreignKey = {
-        type: "ZodForeignKey",
-        foreignSchema,
-        foreignProperty,
-      } as ZodForeignKeyDef<TForeign>;
-    }
-
-    z4.globalRegistry.add(this, currentMetadata);
-  } else {
-    z4.globalRegistry.add(this, {
-      foreignKey: {
-        type: "ZodForeignKey",
-        foreignSchema,
-        foreignProperty,
-      } as ZodForeignKeyDef<TForeign>,
-    });
+  if (currentMetadata?.foreignKey) {
+    throw new Error(
+      `Foreign key '${String(
+        (currentMetadata.foreignKey as ZodForeignKeyDef).foreignProperty
+      )}' already defined`
+    );
   }
+
+  setZodMetadata(this, {
+    ...currentMetadata,
+    foreignKey: {
+      type: "ZodForeignKey",
+      foreignSchema,
+      foreignProperty,
+    } as ZodForeignKeyDef<TForeign>,
+  });
 
   return this;
 }

@@ -1,20 +1,10 @@
 import * as z4 from "zod/v4/core";
+import { mergeZodMetadata } from "../utils/zodMetadataRegistry.js";
 
 export function notes<T extends z4.$ZodType>(this: T, ...notes: string[]): T {
+  mergeZodMetadata(this, {
+    notes,
+  });
 
-    const currentMetadata = z4.globalRegistry.get(this);
-
-    if (currentMetadata) {
-        currentMetadata.notes = [...(currentMetadata.notes as string[] || []), ...notes];
-
-        z4.globalRegistry.add(this, {
-            ...currentMetadata
-        });
-    } else {
-        z4.globalRegistry.add(this, {
-            notes
-        });
-    }
-
-    return this;
-};
+  return this;
+}

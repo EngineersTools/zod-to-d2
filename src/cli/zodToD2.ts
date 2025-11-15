@@ -1,4 +1,4 @@
-import { $ZodObject, $ZodType, globalRegistry } from "zod/v4/core";
+import { $ZodObject, $ZodType } from "zod/v4/core";
 import { buildDiagram } from "../builder/buildDiagram.js";
 import { buildRelationship } from "../builder/buildRelationship.js";
 import { buildTable } from "../builder/buildTable.js";
@@ -6,6 +6,7 @@ import { loadZodSchemas } from "../loader/loadZodSchemas.js";
 import { scanDirectory } from "../loader/scanDirectory.js";
 import { parseProperties } from "../parser/parseProperties.js";
 import { parseRelationships } from "../parser/parseRelationships.js";
+import { getZodMetadata } from "../utils/zodMetadataRegistry.js";
 import {
   isLoadedZodSchemaError,
   isLoadedZodSchemaSuccess,
@@ -60,9 +61,7 @@ export async function zodToD2(config: ZodToD2Config): Promise<void> {
     console.log(`Processing schema: ${s.key || "Unnamed Schema"}...`);
     
     const tableName =
-      (globalRegistry.get(s.schema as $ZodObject)?.tableName as string) ||
-      s.key ||
-      "unknown_table";
+      getZodMetadata(s.schema as $ZodObject)?.tableName || s.key || "unknown_table";
 
     const properties = parseProperties(s.schema as $ZodType, tableName);
     const relationships = parseRelationships(s.schema as $ZodType, tableName);
