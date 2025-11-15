@@ -10,6 +10,9 @@ export async function loadZodSchemas(
     const br = await bundleRequire({
       filepath: filePath,
       format: "esm",
+      esbuildOptions: {
+        external: ["zod", "zod/*"],
+      },
     });
 
     return Object.entries(br.mod)
